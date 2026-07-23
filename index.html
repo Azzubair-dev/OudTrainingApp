@@ -5,17 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>تعلم العود</title>
 
-    <!-- Anti-Cache Meta Tags -->
+    <!-- Anti-Cache Meta Tags to Force Fresh Updates -->
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
 
-    <!-- PWA & iOS Icons -->
+    <!-- PWA & iOS Standalone Web App Meta Tags -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="تعلم العود">
     <link rel="apple-touch-icon" href="icon.png">
     <link rel="icon" type="image/png" href="icon.png">
+    <link rel="manifest" href='data:application/manifest+json,{"name":"تعلم العود","short_name":"تعلم العود","display":"standalone","background_color":"#ffffff","theme_color":"#8a6859","icons":[{"src":"icon.png","sizes":"512x512","type":"image/png"}]}'>
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -26,12 +27,21 @@
                 extend: {
                     colors: {
                         brown: {
-                            50: '#fdf8f6', 100: '#f2e8e5', 200: '#eaddd7', 300: '#e0cec7',
-                            400: '#d2bab0', 500: '#a18072', 600: '#8a6859', 700: '#694c3f',
-                            800: '#4a352a', 900: '#271c15',
+                            50: '#fdf8f6',
+                            100: '#f2e8e5',
+                            200: '#eaddd7',
+                            300: '#e0cec7',
+                            400: '#d2bab0',
+                            500: '#a18072',
+                            600: '#8a6859',
+                            700: '#694c3f',
+                            800: '#4a352a',
+                            900: '#271c15',
                         }
                     },
-                    fontFamily: { sans: ['Cairo', 'sans-serif'] }
+                    fontFamily: {
+                        sans: ['Cairo', 'sans-serif'],
+                    }
                 }
             }
         }
@@ -41,129 +51,369 @@
         body { transition: background-color 0.2s, color 0.2s; }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100 min-h-screen flex flex-col font-sans pb-40">
+<body class="bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100 min-h-screen flex flex-col font-sans pb-36">
 
-    <!-- Header -->
+    <!-- Header & Dark Mode Toggle -->
     <header class="bg-white dark:bg-gray-800 shadow-sm p-4 relative flex justify-between items-center border-b border-gray-200 dark:border-gray-700">
         <button id="theme-btn" class="p-2 rounded-md bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition" title="Toggle Dark Mode">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
         </button>
-        <h1 class="text-xl font-bold tracking-tight text-center flex-grow" dir="auto">تعلم العود</h1>
+        <h1 class="text-xl font-bold tracking-tight text-right flex-grow pr-4" dir="auto">تعلم العود</h1>
     </header>
 
-    <!-- Main Content -->
+    <!-- Main Content Area -->
     <main class="flex-grow w-full max-w-2xl mx-auto p-4 md:p-6 flex flex-col gap-6">
         
-        <!-- Practice Routine Box -->
-        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-4 md:p-6">
-            <div class="flex justify-between items-center mb-4">
-                <button onclick="openModal()" class="text-white bg-brown-600 hover:bg-brown-700 rounded-full w-8 h-8 flex items-center justify-center font-bold text-xl leading-none transition shadow-sm pb-1">+</button>
+        <!-- Practice Steps Box -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-4 md:p-6 relative">
+            <div class="flex justify-between items-center mb-4 gap-3">
+                <button onclick="openModal()" class="text-white bg-brown-600 hover:bg-brown-700 rounded-full w-8 h-8 flex items-center justify-center font-bold text-xl leading-none transition shadow-sm pb-1" title="Add Step">+</button>
                 <h2 class="text-xl font-bold text-gray-800 dark:text-gray-100" dir="rtl">تمارين العزف</h2>
             </div>
             
-            <ul id="steps-list" class="space-y-3"></ul>
+            <!-- The List -->
+            <ul id="steps-list" class="space-y-3">
+                <!-- JavaScript will populate the steps here -->
+            </ul>
         </div>
         
     </main>
 
-    <!-- Add/Edit Modal -->
-    <div id="step-modal" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center backdrop-blur-sm">
+    <!-- Add/Edit Step Modal -->
+    <div id="step-modal" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center backdrop-blur-sm transition-opacity">
         <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg w-full max-w-sm mx-4">
-            <h3 id="modal-title" class="text-lg font-bold mb-4 text-gray-900 dark:text-white" dir="auto">إضافة تمرين</h3>
-            <input type="text" id="modal-input" placeholder="اسم التمرين..." class="w-full p-3 border rounded-lg bg-gray-50 dark:bg-gray-700 mb-2" dir="auto">
-            <textarea id="modal-desc" placeholder="وصف قصير..." class="w-full p-3 border rounded-lg bg-gray-50 dark:bg-gray-700 mb-4 h-20" dir="auto"></textarea>
+            <h3 id="modal-title" class="text-lg font-bold mb-4 text-gray-900 dark:text-white" dir="auto">إضافة تمرين جديد</h3>
+            <input type="text" id="modal-input" placeholder="اسم التمرين..." class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-brown-500 mb-2 text-gray-900 dark:text-white" dir="auto" onkeypress="handleModalEnter(event)">
+            <textarea id="modal-desc" placeholder="وصف قصير أو تعليمات (اختياري)" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-brown-500 mb-4 text-gray-900 dark:text-white resize-none h-20" dir="auto"></textarea>
             
             <div class="flex justify-between items-center w-full">
-                <button id="modal-delete-btn" onclick="handleModalDelete()" class="hidden text-red-500 font-medium text-sm">حذف</button>
-                <div class="flex space-x-3 ml-auto">
-                    <button onclick="closeModal()" class="px-4 py-2 text-gray-600 dark:text-gray-400">إلغاء</button>
-                    <button onclick="saveStep()" class="px-4 py-2 bg-brown-600 text-white rounded-lg">حفظ</button>
+                <div>
+                    <button id="modal-delete-btn" onclick="handleModalDelete()" class="hidden px-3 py-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition font-medium text-sm">حذف التمرين</button>
+                </div>
+                <div class="flex space-x-3 rtl:space-x-reverse">
+                    <button onclick="closeModal()" class="px-4 py-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition font-medium">إلغاء</button>
+                    <button onclick="saveStep()" class="px-4 py-2 bg-brown-600 hover:bg-brown-700 text-white rounded-lg font-semibold shadow-sm transition">حفظ</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Footer -->
-    <footer class="fixed bottom-0 left-0 w-full bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 p-4 shadow-lg z-10 text-center">
-        <div class="max-w-2xl mx-auto">
-            <div class="flex justify-center items-center space-x-3 rtl:space-x-reverse mb-2">
-                <span class="flex items-center justify-center w-8 h-8 rounded-md bg-gray-100 dark:bg-gray-700 font-semibold border">F</span>
-                <span class="flex items-center justify-center w-8 h-8 rounded-md bg-gray-100 dark:bg-gray-700 font-semibold border">A</span>
-                <span class="flex items-center justify-center w-8 h-8 rounded-md bg-gray-100 dark:bg-gray-700 font-semibold border">D</span>
-                <span class="flex items-center justify-center w-8 h-8 rounded-md bg-gray-100 dark:bg-gray-700 font-semibold border">G</span>
-                <span class="flex items-center justify-center w-8 h-8 rounded-md bg-gray-100 dark:bg-gray-700 font-semibold border">C</span>
+    <!-- Footer (Tuning, Metronome & Version) -->
+    <footer class="fixed bottom-0 left-0 w-full bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 p-4 shadow-lg z-10">
+        <div class="max-w-2xl mx-auto flex flex-col gap-2">
+            <div class="flex justify-between items-center">
+                <!-- Tuning Notes -->
+                <div class="flex items-center space-x-3 rtl:space-x-reverse">
+                    <span class="text-xs uppercase font-bold text-gray-400">التدوزين</span>
+                    <div class="flex space-x-1.5 rtl:space-x-reverse">
+                        <span class="flex items-center justify-center w-7 h-7 rounded-md bg-gray-100 dark:bg-gray-700 font-semibold border border-gray-200 dark:border-gray-600 text-xs">F</span>
+                        <span class="flex items-center justify-center w-7 h-7 rounded-md bg-gray-100 dark:bg-gray-700 font-semibold border border-gray-200 dark:border-gray-600 text-xs">A</span>
+                        <span class="flex items-center justify-center w-7 h-7 rounded-md bg-gray-100 dark:bg-gray-700 font-semibold border border-gray-200 dark:border-gray-600 text-xs">D</span>
+                        <span class="flex items-center justify-center w-7 h-7 rounded-md bg-gray-100 dark:bg-gray-700 font-semibold border border-gray-200 dark:border-gray-600 text-xs">G</span>
+                        <span class="flex items-center justify-center w-7 h-7 rounded-md bg-gray-100 dark:bg-gray-700 font-semibold border border-gray-200 dark:border-gray-600 text-xs">C</span>
+                    </div>
+                </div>
+
+                <!-- Metronome Control -->
+                <div class="flex items-center gap-3">
+                    <div class="flex flex-col items-end">
+                        <label for="bpm-slider" class="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-0.5" id="bpm-display">120 BPM</label>
+                        <input type="range" id="bpm-slider" min="40" max="208" value="120" class="w-20 sm:w-24 h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700 accent-brown-600">
+                    </div>
+                    <button id="metronome-btn" onclick="toggleMetronome()" class="w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-brown-100 hover:text-brown-700 dark:hover:bg-brown-900/50 dark:hover:text-brown-400 border border-gray-200 dark:border-gray-600 flex items-center justify-center transition shadow-sm" title="المترونوم">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </button>
+                </div>
             </div>
-            <div class="text-xs text-gray-400">v1.5</div>
+            <div class="text-center text-[10px] text-gray-400 tracking-widest font-mono">v1.5</div>
         </div>
     </footer>
 
+    <!-- JavaScript Application Logic -->
     <script>
+        // --- State ---
         let routine = [];
         let db;
         let globalTimer = null;
 
+        // --- Metronome State & Audio Context ---
+        let audioContext = null;
+        let isMetronomePlaying = false;
+        let currentBeatInBar = 0;
+        let nextNoteTime = 0.0;
+        let bpm = 120;
+        const beatsPerBar = 4; 
+        const lookahead = 25.0; 
+        const scheduleAheadTime = 0.1; 
+        let timerWorker = null; 
+
+        // --- Database (IndexedDB) ---
         function initDB() {
-            const request = indexedDB.open('OudTrackerDB', 3);
+            const request = indexedDB.open('OudTrackerMinimal', 3);
+
             request.onupgradeneeded = (e) => {
                 db = e.target.result;
-                if (!db.objectStoreNames.contains('data')) db.createObjectStore('data');
+                if (!db.objectStoreNames.contains('data')) {
+                    db.createObjectStore('data');
+                }
             };
+
             request.onsuccess = (e) => {
                 db = e.target.result;
                 loadData();
             };
+            
+            request.onerror = (e) => console.error("IndexedDB error:", e);
+        }
+
+        function saveData() {
+            if (!db) return;
+            const tx = db.transaction('data', 'readwrite');
+            tx.objectStore('data').put(routine, 'myRoutine');
         }
 
         function loadData() {
+            if (!db) return;
             const tx = db.transaction('data', 'readonly');
             const req = tx.objectStore('data').get('myRoutine');
+            
             req.onsuccess = () => {
                 let data = req.result;
-                // Migration: If data is old/missing, set default Arabic steps
-                if (!data || data.length === 0 || (data[0].name === "Warm-up")) {
+
+                // Check if data is empty or contains old defaults
+                const oldDefaults = ["Warm-up (Risha Exercises)", "Left Hand Independence", "Maqam Scales"];
+                const hasOnlyOldDefaults = data && data.length > 0 && data.every(s => oldDefaults.includes(s.name));
+
+                if (!data || data.length === 0 || hasOnlyOldDefaults) {
                     routine = [
-                        { id: 1, name: "احماء لليد ودوزان العود", desc: "تأكد من سلامة الجلسة ومسكة الريشة", seconds: 0, isRunning: false, isDone: false },
-                        { id: 2, name: "تمرين صد رد ٨ مرات على كل وتر", desc: "التركيز على نظافة الصوت وسرعة الريشة", seconds: 0, isRunning: false, isDone: false },
-                        { id: 3, name: "تمرين صد مطلق رد اول صد ثاني ...", desc: "تمرين التوافق الحركي بين اليد اليمنى واليسرى", seconds: 0, isRunning: false, isDone: false }
+                        { id: Date.now(), name: "احماء لليد ودوزان العود", description: "تأكد من سلامة الجلسة ومسكة الريشة", seconds: 0, isRunning: false, isDone: false },
+                        { id: Date.now()+1, name: "تمرين صد رد ٨ مرات على كل وتر", description: "التركيز على نظافة الصوت وسرعة الريشة", seconds: 0, isRunning: false, isDone: false },
+                        { id: Date.now()+2, name: "تمرين صد مطلق رد اول صد ثاني ...", description: "تمرين التوافق الحركي بين اليد اليمنى واليسرى", seconds: 0, isRunning: false, isDone: false }
                     ];
                     saveData();
                 } else {
-                    routine = data.map(s => ({...s, isRunning: false}));
+                    routine = data.map(step => ({...step, isRunning: false}));
                 }
                 render();
             };
         }
 
-        function saveData() {
-            const tx = db.transaction('data', 'readwrite');
-            tx.objectStore('data').put(routine, 'myRoutine');
+        // --- Helper Functions ---
+        function formatTime(totalSeconds) {
+            const m = Math.floor(totalSeconds / 60).toString().padStart(2, '0');
+            const s = (totalSeconds % 60).toString().padStart(2, '0');
+            return `${m}:${s}`;
         }
 
+        // --- Modal Logic ---
+        let editingIndex = -1;
+
+        function openModal(index = -1) {
+            editingIndex = index;
+            const modal = document.getElementById('step-modal');
+            const title = document.getElementById('modal-title');
+            const input = document.getElementById('modal-input');
+            const descInput = document.getElementById('modal-desc');
+            const deleteBtn = document.getElementById('modal-delete-btn');
+
+            if (index >= 0) {
+                title.textContent = "تعديل التمرين";
+                input.value = routine[index].name;
+                descInput.value = routine[index].description || '';
+                deleteBtn.classList.remove('hidden');
+            } else {
+                title.textContent = "إضافة تمرين جديد";
+                input.value = "";
+                descInput.value = "";
+                deleteBtn.classList.add('hidden');
+            }
+
+            modal.classList.remove('hidden');
+            setTimeout(() => input.focus(), 100);
+        }
+
+        function closeModal() {
+            document.getElementById('step-modal').classList.add('hidden');
+            editingIndex = -1;
+        }
+
+        function saveStep() {
+            const input = document.getElementById('modal-input');
+            const descInput = document.getElementById('modal-desc');
+            const name = input.value.trim();
+            const desc = descInput.value.trim();
+            
+            if (name) {
+                if (editingIndex >= 0) {
+                    routine[editingIndex].name = name;
+                    routine[editingIndex].description = desc;
+                } else {
+                    routine.push({
+                        id: Date.now(),
+                        name: name,
+                        description: desc,
+                        seconds: 0,
+                        isRunning: false,
+                        isDone: false
+                    });
+                }
+                saveData();
+                render();
+                closeModal();
+            }
+        }
+
+        function handleModalEnter(e) {
+            if (e.key === 'Enter') saveStep();
+        }
+
+        function handleModalDelete() {
+            if (editingIndex >= 0) {
+                routine.splice(editingIndex, 1);
+                saveData();
+                render();
+                manageInterval();
+                closeModal();
+            }
+        }
+
+        // --- Reordering Actions ---
+        function moveStep(index, dir) {
+            if (dir === -1 && index > 0) {
+                [routine[index], routine[index - 1]] = [routine[index - 1], routine[index]];
+            } else if (dir === 1 && index < routine.length - 1) {
+                [routine[index], routine[index + 1]] = [routine[index + 1], routine[index]];
+            }
+            saveData();
+            render();
+        }
+
+        function toggleTimer(index) {
+            const step = routine[index];
+            if (step.isDone) return; 
+
+            if (step.isRunning) {
+                step.isRunning = false;
+            } else {
+                routine.forEach(s => s.isRunning = false);
+                step.isRunning = true;
+            }
+            saveData();
+            render();
+            manageInterval();
+        }
+
+        function toggleDone(index) {
+            routine[index].isDone = !routine[index].isDone;
+            routine[index].isRunning = false;
+            saveData();
+            render();
+            manageInterval();
+        }
+
+        function manageInterval() {
+            const activeIndex = routine.findIndex(s => s.isRunning);
+            
+            if (activeIndex !== -1 && !globalTimer) {
+                globalTimer = setInterval(() => {
+                    const idx = routine.findIndex(s => s.isRunning);
+                    if (idx !== -1) {
+                        routine[idx].seconds++;
+                        const timerEl = document.getElementById(`timer-${routine[idx].id}`);
+                        if (timerEl) timerEl.textContent = formatTime(routine[idx].seconds);
+                        if (routine[idx].seconds % 5 === 0) saveData(); 
+                    } else {
+                        clearInterval(globalTimer);
+                        globalTimer = null;
+                    }
+                }, 1000);
+            } else if (activeIndex === -1 && globalTimer) {
+                clearInterval(globalTimer);
+                globalTimer = null;
+                saveData();
+            }
+        }
+
+        // --- Render ---
         function render() {
             const list = document.getElementById('steps-list');
             list.innerHTML = '';
+
+            if (routine.length === 0) {
+                list.innerHTML = '<li class="text-center text-gray-500 py-6 italic">لا توجد تمارين حالياً. اضغط على + لإضافة تمرين.</li>';
+                return;
+            }
+
             routine.forEach((step, index) => {
                 const li = document.createElement('li');
-                li.className = `p-4 rounded-xl border ${step.isDone ? 'bg-gray-100 dark:bg-gray-700 opacity-60' : 'bg-white dark:bg-gray-800'}`;
-                li.innerHTML = `
-                    <div class="flex justify-between items-start mb-2">
-                        <div class="flex-grow">
-                            <h4 class="font-bold text-lg">${index + 1}. ${step.name}</h4>
-                            <p class="text-sm text-gray-500">${step.desc || ''}</p>
-                        </div>
-                        <div class="flex items-center gap-1">
-                            <button onclick="moveStep(${index}, -1)" class="p-1 hover:bg-gray-200 dark:hover:bg-gray-600 rounded">⬆️</button>
-                            <button onclick="moveStep(${index}, 1)" class="p-1 hover:bg-gray-200 dark:hover:bg-gray-600 rounded">⬇️</button>
-                            <button onclick="openModal(${index})" class="p-1 hover:bg-gray-200 dark:hover:bg-gray-600 rounded">✏️</button>
-                        </div>
+                
+                let cardClass = "flex items-start gap-3 p-3.5 rounded-xl border transition-colors ";
+                let nameClass = "font-semibold text-base sm:text-lg break-words leading-snug ";
+                let descClass = "text-sm break-words leading-relaxed ";
+                
+                if (step.isDone) {
+                    cardClass += "bg-gray-100 border-transparent dark:bg-gray-800/50";
+                    nameClass += "text-gray-400 dark:text-gray-500 line-through";
+                    descClass += "text-gray-400 dark:text-gray-500 line-through";
+                } else if (step.isRunning) {
+                    cardClass += "bg-brown-50 border-brown-200 dark:bg-brown-900/30 dark:border-brown-800";
+                    nameClass += "text-brown-800 dark:text-brown-200";
+                    descClass += "text-brown-600 dark:text-brown-400 opacity-90";
+                } else {
+                    cardClass += "bg-white border-gray-200 dark:bg-gray-800 dark:border-gray-700";
+                    nameClass += "text-gray-800 dark:text-gray-200";
+                    descClass += "text-gray-500 dark:text-gray-400";
+                }
+
+                const arrowsHTML = `
+                    <div class="flex flex-col gap-0.5">
+                        <button onclick="moveStep(${index}, -1)" class="p-1 text-gray-400 hover:text-brown-600 dark:hover:text-brown-400 hover:bg-brown-50 dark:hover:bg-brown-900/30 rounded transition ${index === 0 ? 'invisible' : ''}" title="تحريك للأعلى">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg>
+                        </button>
+                        <button onclick="moveStep(${index}, 1)" class="p-1 text-gray-400 hover:text-brown-600 dark:hover:text-brown-400 hover:bg-brown-50 dark:hover:bg-brown-900/30 rounded transition ${index === routine.length - 1 ? 'invisible' : ''}" title="تحريك للأسفل">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
                     </div>
-                    <div class="flex justify-between items-center mt-3 pt-3 border-t">
-                        <span class="font-mono text-xl font-bold">${formatTime(step.seconds)}</span>
-                        <div class="flex gap-2">
-                            ${!step.isDone ? `
-                                <button onclick="toggleTimer(${index})" class="px-3 py-1 bg-brown-600 text-white rounded-lg">${step.isRunning ? 'إيقاف' : 'بدء'}</button>
-                                <button onclick="completeStep(${index})" class="px-3 py-1 bg-green-600 text-white rounded-lg">تم</button>
-                            ` : `<button onclick="completeStep(${index})" class="px-3 py-1 bg-gray-500 text-white rounded-lg">تراجع</button>`}
+                `;
+
+                let playBtn = '';
+                if (!step.isDone) {
+                    if (step.isRunning) {
+                        playBtn = `<button onclick="toggleTimer(${index})" class="w-9 h-9 flex items-center justify-center rounded-full bg-orange-100 text-orange-700 hover:bg-orange-200 dark:bg-orange-900/50 dark:text-orange-400 transition shadow-sm" title="إيقاف مؤقت"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg></button>`;
+                    } else {
+                        playBtn = `<button onclick="toggleTimer(${index})" class="w-9 h-9 flex items-center justify-center rounded-full bg-brown-100 text-brown-700 hover:bg-brown-200 dark:bg-brown-900/50 dark:text-brown-400 transition shadow-sm" title="تشغيل"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path></svg></button>`;
+                    }
+                }
+
+                const doneBtnClass = step.isDone 
+                    ? "w-9 h-9 flex items-center justify-center rounded-full bg-green-500 text-white shadow-sm" 
+                    : "w-9 h-9 flex items-center justify-center rounded-full bg-gray-100 text-gray-400 hover:bg-green-100 hover:text-green-600 dark:bg-gray-700 dark:hover:bg-green-900/50 dark:hover:text-green-400 transition";
+                
+                const doneBtn = `<button onclick="toggleDone(${index})" class="${doneBtnClass}" title="${step.isDone ? 'إلغاء الإنجاز' : 'تم'}"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></button>`;
+                const editBtn = `<button onclick="openModal(${index})" class="w-9 h-9 flex items-center justify-center text-gray-400 hover:text-brown-600 hover:bg-brown-50 dark:hover:bg-brown-900/30 rounded-full transition" title="تعديل"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg></button>`;
+
+                li.className = cardClass;
+                li.setAttribute("dir", "rtl");
+                li.innerHTML = `
+                    <div class="flex flex-col justify-center items-center shrink-0 pt-1" dir="ltr">
+                        ${arrowsHTML}
+                    </div>
+                    <div class="flex-grow flex flex-col min-w-0">
+                        <div class="${nameClass} flex items-baseline">
+                            <span class="font-bold text-brown-600 dark:text-brown-400 ml-2">${index + 1}.</span>
+                            <span class="break-words">${step.name}</span>
+                        </div>
+                        ${step.description ? `<div class="${descClass} pr-5 mt-0.5 break-words">${step.description}</div>` : ''}
+                        
+                        <div class="flex items-center justify-between mt-3 pt-2.5 border-t border-gray-100 dark:border-gray-700/50" dir="ltr">
+                            <div class="flex items-center gap-2">
+                                ${playBtn}
+                                ${doneBtn}
+                                ${editBtn}
+                            </div>
+                            <div id="timer-${step.id}" class="font-mono text-lg font-semibold ${step.isRunning ? 'text-brown-600 dark:text-brown-400' : 'text-gray-500'}">
+                                ${formatTime(step.seconds)}
+                            </div>
                         </div>
                     </div>
                 `;
@@ -171,52 +421,105 @@
             });
         }
 
-        function moveStep(idx, dir) {
-            const newIdx = idx + dir;
-            if (newIdx >= 0 && newIdx < routine.length) {
-                [routine[idx], routine[newIdx]] = [routine[newIdx], routine[idx]];
-                saveData(); render();
+        // --- Dark Mode ---
+        const themeBtn = document.getElementById('theme-btn');
+        function applyTheme(isDark) {
+            if (isDark) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
             }
         }
 
-        let editIdx = -1;
-        function openModal(i = -1) {
-            editIdx = i;
-            document.getElementById('modal-title').textContent = i >= 0 ? "تعديل" : "إضافة";
-            document.getElementById('modal-input').value = i >= 0 ? routine[i].name : "";
-            document.getElementById('modal-desc').value = i >= 0 ? (routine[i].desc || "") : "";
-            document.getElementById('modal-delete-btn').classList.toggle('hidden', i < 0);
-            document.getElementById('step-modal').classList.remove('hidden');
-        }
-        function closeModal() { document.getElementById('step-modal').classList.add('hidden'); }
-        function saveStep() {
-            const name = document.getElementById('modal-input').value;
-            const desc = document.getElementById('modal-desc').value;
-            if(editIdx >= 0) { routine[editIdx].name = name; routine[editIdx].desc = desc; }
-            else { routine.push({ id: Date.now(), name, desc, seconds: 0, isRunning: false, isDone: false }); }
-            saveData(); render(); closeModal();
-        }
-        function handleModalDelete() { routine.splice(editIdx, 1); saveData(); render(); closeModal(); }
-        function toggleTimer(i) {
-            routine.forEach((s, idx) => s.isRunning = (idx === i ? !s.isRunning : false));
-            render(); manageTimer();
-        }
-        function completeStep(i) { routine[i].isDone = !routine[i].isDone; routine[i].isRunning = false; saveData(); render(); manageTimer(); }
-        
-        function manageTimer() {
-            if(globalTimer) clearInterval(globalTimer);
-            const active = routine.find(s => s.isRunning);
-            if(active) globalTimer = setInterval(() => { active.seconds++; saveData(); render(); }, 1000);
+        // --- Metronome Audio Logic ---
+        function initAudioContext() {
+            if (!audioContext) {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                audioContext = new AudioContext();
+            }
+            if (audioContext.state === 'suspended') {
+                audioContext.resume();
+            }
         }
 
-        function formatTime(s) { return Math.floor(s/60).toString().padStart(2,'0') + ":" + (s%60).toString().padStart(2,'0'); }
+        function nextNote() {
+            const secondsPerBeat = 60.0 / bpm;
+            nextNoteTime += secondsPerBeat;
+            currentBeatInBar++;
+            if (currentBeatInBar === beatsPerBar) {
+                currentBeatInBar = 0;
+            }
+        }
 
-        document.getElementById('theme-btn').onclick = () => {
-            document.documentElement.classList.toggle('dark');
-            localStorage.theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
-        };
-        if(localStorage.theme === 'dark') document.documentElement.classList.add('dark');
-        
+        function scheduleNote(beatNumber, time) {
+            const osc = audioContext.createOscillator();
+            const envelope = audioContext.createGain();
+
+            osc.connect(envelope);
+            envelope.connect(audioContext.destination);
+
+            if (beatNumber === 0) {
+                osc.frequency.value = 880.0;
+            } else {
+                osc.frequency.value = 440.0;
+            }
+
+            envelope.gain.value = 1;
+            envelope.gain.exponentialRampToValueAtTime(1, time + 0.001);
+            envelope.gain.exponentialRampToValueAtTime(0.001, time + 0.02);
+
+            osc.start(time);
+            osc.stop(time + 0.03);
+        }
+
+        function scheduler() {
+            while (nextNoteTime < audioContext.currentTime + scheduleAheadTime ) {
+                scheduleNote(currentBeatInBar, nextNoteTime);
+                nextNote();
+            }
+            if (isMetronomePlaying) {
+                timerWorker = setTimeout(scheduler, lookahead);
+            }
+        }
+
+        function toggleMetronome() {
+            const btn = document.getElementById('metronome-btn');
+            
+            if (isMetronomePlaying) {
+                isMetronomePlaying = false;
+                clearTimeout(timerWorker);
+                
+                btn.classList.remove('bg-brown-600', 'text-white', 'hover:bg-brown-700');
+                btn.classList.add('bg-gray-100', 'text-gray-600', 'dark:bg-gray-700', 'dark:text-gray-300');
+            } else {
+                initAudioContext();
+                isMetronomePlaying = true;
+                currentBeatInBar = 0;
+                nextNoteTime = audioContext.currentTime + 0.05;
+                scheduler();
+
+                btn.classList.remove('bg-gray-100', 'text-gray-600', 'dark:bg-gray-700', 'dark:text-gray-300');
+                btn.classList.add('bg-brown-600', 'text-white', 'hover:bg-brown-700');
+            }
+        }
+
+        const bpmSlider = document.getElementById('bpm-slider');
+        const bpmDisplay = document.getElementById('bpm-display');
+        bpmSlider.addEventListener('input', (e) => {
+            bpm = parseInt(e.target.value);
+            bpmDisplay.textContent = `${bpm} BPM`;
+        });
+
+        themeBtn.addEventListener('click', () => {
+            const isDark = !document.documentElement.classList.contains('dark');
+            applyTheme(isDark);
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        });
+
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            applyTheme(true);
+        }
+
         initDB();
     </script>
 </body>

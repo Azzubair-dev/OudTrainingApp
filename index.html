@@ -14,8 +14,9 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="تعلم العود">
-    <link rel="apple-touch-icon" href="apple-touch-icon.png">
-    <link rel="manifest" href='data:application/manifest+json,{"name":"تعلم العود","short_name":"تعلم العود","display":"standalone","background_color":"#ffffff","theme_color":"#8a6859"}'>
+    <link rel="apple-touch-icon" href="icon.png">
+    <link rel="icon" type="image/png" href="icon.png">
+    <link rel="manifest" href='data:application/manifest+json,{"name":"تعلم العود","short_name":"تعلم العود","display":"standalone","background_color":"#ffffff","theme_color":"#8a6859","icons":[{"src":"icon.png","sizes":"512x512","type":"image/png"}]}'>
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -50,7 +51,7 @@
         body { transition: background-color 0.2s, color 0.2s; }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100 min-h-screen flex flex-col font-sans pb-32">
+<body class="bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100 min-h-screen flex flex-col font-sans pb-36">
 
     <!-- Header & Dark Mode Toggle -->
     <header class="bg-white dark:bg-gray-800 shadow-sm p-4 relative flex justify-between items-center border-b border-gray-200 dark:border-gray-700">
@@ -66,8 +67,8 @@
         <!-- Practice Steps Box -->
         <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-4 md:p-6 relative">
             <div class="flex justify-between items-center mb-4 gap-3">
-                <h2 class="text-xl font-bold text-gray-800 dark:text-gray-100" dir="rtl">تمارين العزف</h2>
                 <button onclick="openModal()" class="text-white bg-brown-600 hover:bg-brown-700 rounded-full w-8 h-8 flex items-center justify-center font-bold text-xl leading-none transition shadow-sm pb-1" title="Add Step">+</button>
+                <h2 class="text-xl font-bold text-gray-800 dark:text-gray-100" dir="rtl">تمارين العزف</h2>
             </div>
             
             <!-- The List -->
@@ -147,7 +148,7 @@
 
         // --- Database (IndexedDB) ---
         function initDB() {
-            const request = indexedDB.open('OudTrackerMinimal', 1);
+            const request = indexedDB.open('OudTrackerMinimal', 2);
 
             request.onupgradeneeded = (e) => {
                 db = e.target.result;
@@ -176,15 +177,21 @@
             const req = tx.objectStore('data').get('myRoutine');
             
             req.onsuccess = () => {
-                if (req.result && req.result.length > 0) {
-                    routine = req.result.map(step => ({...step, isRunning: false}));
-                } else {
+                const oldDefaults = ["Warm-up (Risha Exercises)", "Left Hand Independence", "Maqam Scales"];
+                let data = req.result;
+
+                // Check if data is empty or contains the old English defaults
+                const hasOnlyOldDefaults = data && data.length > 0 && data.every(s => oldDefaults.includes(s.name));
+
+                if (!data || data.length === 0 || hasOnlyOldDefaults) {
                     routine = [
                         { id: Date.now(), name: "احماء لليد ودوزان العود", description: "تأكد من سلامة الجلسة ومسكة الريشة", seconds: 0, isRunning: false, isDone: false },
                         { id: Date.now()+1, name: "تمرين صد رد ٨ مرات على كل وتر", description: "التركيز على نظافة الصوت وسرعة الريشة", seconds: 0, isRunning: false, isDone: false },
                         { id: Date.now()+2, name: "تمرين صد مطلق رد اول صد ثاني ...", description: "تمرين التوافق الحركي بين اليد اليمنى واليسرى", seconds: 0, isRunning: false, isDone: false }
                     ];
                     saveData();
+                } else {
+                    routine = data.map(step => ({...step, isRunning: false}));
                 }
                 render();
             };

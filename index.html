@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Oud Practice App</title>
+    <title>تعلم العود</title>
 
     <!-- PWA & iOS Standalone Web App Meta Tags -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Oud Tracker">
+    <meta name="apple-mobile-web-app-title" content="تعلم العود">
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
-    <link rel="manifest" href='data:application/manifest+json,{"name":"Oud Practice Tracker","short_name":"Oud Tracker","display":"standalone","background_color":"#ffffff","theme_color":"#2563eb"}'>
+    <link rel="manifest" href='data:application/manifest+json,{"name":"تعلم العود","short_name":"تعلم العود","display":"standalone","background_color":"#ffffff","theme_color":"#8a6859"}'>
 
     <!-- 1. Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -19,14 +19,28 @@
             darkMode: 'class',
             theme: {
                 extend: {
+                    colors: {
+                        brown: {
+                            50: '#fdf8f6',
+                            100: '#f2e8e5',
+                            200: '#eaddd7',
+                            300: '#e0cec7',
+                            400: '#d2bab0',
+                            500: '#a18072',
+                            600: '#8a6859',
+                            700: '#694c3f',
+                            800: '#4a352a',
+                            900: '#271c15',
+                        }
+                    },
                     fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
+                        sans: ['Cairo', 'sans-serif'],
                     }
                 }
             }
         }
     </script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body { transition: background-color 0.2s, color 0.2s; }
         /* A subtle animation for completed steps */
@@ -39,9 +53,9 @@
 <body class="bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100 min-h-screen flex flex-col font-sans pb-24">
 
     <!-- 2. Header & Dark Mode Toggle -->
-    <header class="bg-white dark:bg-gray-800 shadow-sm p-4 flex justify-between items-center border-b border-gray-200 dark:border-gray-700">
-        <h1 class="text-xl font-semibold tracking-tight">Oud Practice Tracker</h1>
-        <button id="theme-btn" class="p-2 rounded-md bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition" title="Toggle Dark Mode">
+    <header class="bg-white dark:bg-gray-800 shadow-sm p-4 relative flex justify-center items-center border-b border-gray-200 dark:border-gray-700">
+        <h1 class="text-xl font-bold tracking-tight" dir="auto">تعلم العود</h1>
+        <button id="theme-btn" class="absolute right-4 p-2 rounded-md bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition" title="Toggle Dark Mode">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
         </button>
     </header>
@@ -51,9 +65,9 @@
         
         <!-- Practice Steps Box -->
         <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-4 md:p-6 relative">
-            <div class="flex justify-between items-center mb-4">
-                <h2 class="text-xl font-bold text-gray-800 dark:text-gray-100">Practice Routine</h2>
-                <button onclick="openModal()" class="text-white bg-blue-600 hover:bg-blue-700 rounded-full w-8 h-8 flex items-center justify-center font-bold text-xl leading-none transition shadow-sm" title="Add Step">+</button>
+            <div class="flex justify-between items-center mb-4 gap-3">
+                <button onclick="openModal()" class="text-white bg-brown-600 hover:bg-brown-700 rounded-full w-8 h-8 flex items-center justify-center font-bold text-xl leading-none transition shadow-sm pb-1" title="Add Step">+</button>
+                <h2 class="text-xl font-bold text-gray-800 dark:text-gray-100" dir="rtl">تمارين العزف</h2>
             </div>
             
             <!-- The List -->
@@ -67,11 +81,17 @@
     <!-- Add/Edit Step Modal -->
     <div id="step-modal" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center backdrop-blur-sm transition-opacity">
         <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg w-full max-w-sm mx-4">
-            <h3 id="modal-title" class="text-lg font-bold mb-4 text-gray-900 dark:text-white">Add New Step</h3>
-            <input type="text" id="modal-input" placeholder="What do you want to practice?" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4 text-gray-900 dark:text-white" onkeypress="handleModalEnter(event)">
-            <div class="flex justify-end space-x-3">
-                <button onclick="closeModal()" class="px-4 py-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition font-medium">Cancel</button>
-                <button onclick="saveStep()" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold shadow-sm transition">Save</button>
+            <h3 id="modal-title" class="text-lg font-bold mb-4 text-gray-900 dark:text-white" dir="auto">Add New Step</h3>
+            <input type="text" id="modal-input" placeholder="What do you want to practice?" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-brown-500 mb-2 text-gray-900 dark:text-white" dir="auto" onkeypress="handleModalEnter(event)">
+            <textarea id="modal-desc" placeholder="Brief description (optional)" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-brown-500 mb-4 text-gray-900 dark:text-white resize-none h-20" dir="auto"></textarea>
+            <div class="flex justify-between items-center w-full">
+                <div>
+                    <button id="modal-delete-btn" onclick="handleModalDelete()" class="hidden px-4 py-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition font-medium">Delete</button>
+                </div>
+                <div class="flex space-x-3 rtl:space-x-reverse">
+                    <button onclick="closeModal()" class="px-4 py-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition font-medium">Cancel</button>
+                    <button onclick="saveStep()" class="px-4 py-2 bg-brown-600 hover:bg-brown-700 text-white rounded-lg font-semibold shadow-sm transition">Save</button>
+                </div>
             </div>
         </div>
     </div>
@@ -92,9 +112,15 @@
                 </div>
             </div>
 
-            <!-- Placeholder -->
-            <div class="text-xs text-gray-400 font-medium px-3 py-2 border border-dashed border-gray-300 dark:border-gray-600 rounded-md">
-                Metronome / Tuner Area
+            <!-- Metronome -->
+            <div class="flex items-center gap-3">
+                <div class="flex flex-col items-center">
+                    <label for="bpm-slider" class="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1" id="bpm-display">120 BPM</label>
+                    <input type="range" id="bpm-slider" min="40" max="208" value="120" class="w-24 h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700 accent-brown-600">
+                </div>
+                <button id="metronome-btn" onclick="toggleMetronome()" class="w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-brown-100 hover:text-brown-700 dark:hover:bg-brown-900/50 dark:hover:text-brown-400 border border-gray-200 dark:border-gray-600 flex items-center justify-center transition shadow-sm" title="Toggle Metronome">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                </button>
             </div>
             
         </div>
@@ -106,6 +132,17 @@
         let routine = [];
         let db;
         let globalTimer = null;
+
+        // --- Metronome State & Audio Context ---
+        let audioContext = null;
+        let isMetronomePlaying = false;
+        let currentBeatInBar = 0;
+        let nextNoteTime = 0.0;
+        let bpm = 120;
+        const beatsPerBar = 4; // 4/4 time signature default
+        const lookahead = 25.0; // How frequently to call scheduling function (in milliseconds)
+        const scheduleAheadTime = 0.1; // How far ahead to schedule audio (sec)
+        let timerWorker = null; 
 
         // --- Database (IndexedDB) ---
         function initDB() {
@@ -143,8 +180,9 @@
                     routine = req.result.map(step => ({...step, isRunning: false}));
                 } else {
                     routine = [
-                        { id: Date.now(), name: "Warm-up / Risha", seconds: 0, isRunning: false, isDone: false },
-                        { id: Date.now()+1, name: "Maqam Scales", seconds: 0, isRunning: false, isDone: false }
+                        { id: Date.now(), name: "احماء لليد ودوزان العود", description: "تأكد من سلامة الجلسة ومسكة الريشة", seconds: 0, isRunning: false, isDone: false },
+                        { id: Date.now()+1, name: "تمرين صد رد ٨ مرات على كل وتر", description: "التركيز على نظافة الصوت وسرعة الريشة", seconds: 0, isRunning: false, isDone: false },
+                        { id: Date.now()+2, name: "تمرين صد مطلق رد اول صد ثاني ...", description: "تمرين التوافق الحركي بين اليد اليمنى واليسرى", seconds: 0, isRunning: false, isDone: false }
                     ];
                     saveData();
                 }
@@ -167,13 +205,19 @@
             const modal = document.getElementById('step-modal');
             const title = document.getElementById('modal-title');
             const input = document.getElementById('modal-input');
+            const descInput = document.getElementById('modal-desc');
+            const deleteBtn = document.getElementById('modal-delete-btn');
 
             if (index >= 0) {
                 title.textContent = "Edit Step";
                 input.value = routine[index].name;
+                descInput.value = routine[index].description || '';
+                deleteBtn.classList.remove('hidden');
             } else {
                 title.textContent = "Add New Step";
                 input.value = "";
+                descInput.value = "";
+                deleteBtn.classList.add('hidden');
             }
 
             modal.classList.remove('hidden');
@@ -187,15 +231,19 @@
 
         function saveStep() {
             const input = document.getElementById('modal-input');
+            const descInput = document.getElementById('modal-desc');
             const name = input.value.trim();
+            const desc = descInput.value.trim();
             
             if (name) {
                 if (editingIndex >= 0) {
                     routine[editingIndex].name = name;
+                    routine[editingIndex].description = desc;
                 } else {
                     routine.push({
                         id: Date.now(),
                         name: name,
+                        description: desc,
                         seconds: 0,
                         isRunning: false,
                         isDone: false
@@ -209,6 +257,13 @@
 
         function handleModalEnter(e) {
             if (e.key === 'Enter') saveStep();
+        }
+
+        function handleModalDelete() {
+            if (editingIndex >= 0) {
+                deleteStep(editingIndex);
+                closeModal();
+            }
         }
 
         // --- Actions ---
@@ -295,27 +350,31 @@
                 const li = document.createElement('li');
                 
                 // Styling based on state
-                let cardClass = "flex items-center gap-2 sm:gap-3 p-3 rounded-xl border transition-colors ";
-                let titleClass = "flex-grow font-medium text-lg truncate ";
+                let cardClass = "flex items-start gap-2 sm:gap-3 p-3 rounded-xl border transition-colors ";
+                let nameClass = "font-medium text-lg sm:text-xl break-words leading-snug ";
+                let descClass = "text-sm break-words leading-relaxed ";
                 
                 if (step.isDone) {
                     cardClass += "bg-gray-100 border-transparent dark:bg-gray-800/50";
-                    titleClass += "text-gray-400 dark:text-gray-500 line-through";
+                    nameClass += "text-gray-400 dark:text-gray-500 line-through";
+                    descClass += "text-gray-400 dark:text-gray-500 line-through";
                 } else if (step.isRunning) {
-                    cardClass += "bg-blue-50 border-blue-200 dark:bg-blue-900/30 dark:border-blue-800";
-                    titleClass += "text-blue-800 dark:text-blue-300";
+                    cardClass += "bg-brown-50 border-brown-200 dark:bg-brown-900/30 dark:border-brown-800";
+                    nameClass += "text-brown-800 dark:text-brown-200";
+                    descClass += "text-brown-600 dark:text-brown-400 opacity-90";
                 } else {
                     cardClass += "bg-white border-gray-200 dark:bg-gray-800 dark:border-gray-700";
-                    titleClass += "text-gray-800 dark:text-gray-200";
+                    nameClass += "text-gray-800 dark:text-gray-200";
+                    descClass += "text-gray-500 dark:text-gray-400";
                 }
 
                 // Up/Down Arrows
                 const arrowsHTML = `
-                    <div class="flex flex-col gap-1">
-                        <button onclick="moveStep(${index}, -1)" class="p-1 text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700 rounded transition ${index === 0 ? 'invisible' : ''}" title="Move Up">
+                    <div class="flex flex-col gap-1 mt-1">
+                        <button onclick="moveStep(${index}, -1)" class="p-1 text-gray-400 hover:text-brown-600 dark:hover:text-brown-400 hover:bg-brown-50 dark:hover:bg-brown-900/30 rounded transition ${index === 0 ? 'invisible' : ''}" title="Move Up">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg>
                         </button>
-                        <button onclick="moveStep(${index}, 1)" class="p-1 text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700 rounded transition ${index === routine.length - 1 ? 'invisible' : ''}" title="Move Down">
+                        <button onclick="moveStep(${index}, 1)" class="p-1 text-gray-400 hover:text-brown-600 dark:hover:text-brown-400 hover:bg-brown-50 dark:hover:bg-brown-900/30 rounded transition ${index === routine.length - 1 ? 'invisible' : ''}" title="Move Down">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                         </button>
                     </div>
@@ -325,9 +384,9 @@
                 let playBtn = '';
                 if (!step.isDone) {
                     if (step.isRunning) {
-                        playBtn = `<button onclick="toggleTimer(${index})" class="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-full bg-amber-100 text-amber-700 hover:bg-amber-200 dark:bg-amber-900/50 dark:text-amber-400 transition shadow-sm" title="Pause"><svg class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg></button>`;
+                        playBtn = `<button onclick="toggleTimer(${index})" class="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-full bg-orange-100 text-orange-700 hover:bg-orange-200 dark:bg-orange-900/50 dark:text-orange-400 transition shadow-sm" title="Pause"><svg class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg></button>`;
                     } else {
-                        playBtn = `<button onclick="toggleTimer(${index})" class="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-full bg-blue-100 text-blue-700 hover:bg-blue-200 dark:bg-blue-900/50 dark:text-blue-400 transition shadow-sm" title="Play"><svg class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path></svg></button>`;
+                        playBtn = `<button onclick="toggleTimer(${index})" class="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-full bg-brown-100 text-brown-700 hover:bg-brown-200 dark:bg-brown-900/50 dark:text-brown-400 transition shadow-sm" title="Play"><svg class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path></svg></button>`;
                     }
                 }
 
@@ -337,23 +396,31 @@
                 
                 const doneBtn = `<button onclick="toggleDone(${index})" class="${doneBtnClass}" title="${step.isDone ? 'Undo' : 'Mark Done'}"><svg class="w-4 h-4 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></button>`;
                 
-                const editBtn = `<button onclick="openModal(${index})" class="p-1 sm:p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-lg transition" title="Edit"><svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg></button>`;
-
-                const deleteBtn = `<button onclick="deleteStep(${index})" class="p-1 sm:p-2 text-red-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition" title="Delete"><svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>`;
+                const editBtn = `<button onclick="openModal(${index})" class="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center text-gray-400 hover:text-brown-600 hover:bg-brown-50 dark:hover:bg-brown-900/30 rounded-full transition" title="Edit"><svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg></button>`;
 
                 li.className = cardClass;
+                li.setAttribute("dir", "rtl");
                 li.innerHTML = `
-                    ${arrowsHTML}
-                    <div class="${titleClass}" title="${step.name}">${step.name}</div>
-                    
-                    <div class="flex items-center gap-1 sm:gap-2">
-                        <div id="timer-${step.id}" class="font-mono text-sm sm:text-lg font-semibold w-12 sm:w-16 text-right mr-1 sm:mr-2 ${step.isRunning ? 'text-blue-600 dark:text-blue-400' : 'text-gray-500'}">
-                            ${formatTime(step.seconds)}
+                    <div class="flex-grow flex flex-col min-w-0">
+                        <div class="${nameClass} flex items-baseline">
+                            <span class="font-bold text-brown-600 dark:text-brown-400 ml-2 text-base sm:text-lg">${index + 1}.</span>
+                            <span>${step.name}</span>
                         </div>
-                        ${playBtn}
-                        ${doneBtn}
-                        ${editBtn}
-                        ${deleteBtn}
+                        ${step.description ? `<div class="${descClass} pr-6 mt-1">${step.description}</div>` : ''}
+                        
+                        <div class="flex items-center justify-between mt-3 pt-3 border-t border-gray-100 dark:border-gray-700/50" dir="ltr">
+                            <div class="flex items-center gap-2 sm:gap-3">
+                                ${playBtn}
+                                ${doneBtn}
+                                ${editBtn}
+                            </div>
+                            <div id="timer-${step.id}" class="font-mono text-lg sm:text-xl font-semibold ${step.isRunning ? 'text-brown-600 dark:text-brown-400' : 'text-gray-500'}">
+                                ${formatTime(step.seconds)}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mr-3 pr-3 border-r border-gray-200 dark:border-gray-700/50 flex flex-col justify-center items-center shrink-0" dir="ltr">
+                        ${arrowsHTML}
                     </div>
                 `;
                 list.appendChild(li);
@@ -370,6 +437,102 @@
                 document.documentElement.classList.remove('dark');
             }
         }
+
+        // --- Metronome Audio Logic ---
+
+        function initAudioContext() {
+            if (!audioContext) {
+                // Initialize standard or prefixed AudioContext
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                audioContext = new AudioContext();
+            }
+            if (audioContext.state === 'suspended') {
+                audioContext.resume();
+            }
+        }
+
+        function nextNote() {
+            // Advance current note and time by a 16th note...
+            const secondsPerBeat = 60.0 / bpm; // Notice this picks up the CURRENT bpm value.
+            nextNoteTime += secondsPerBeat; // Add beat length to last beat time
+            currentBeatInBar++;    // Advance the beat number, wrap to zero
+            if (currentBeatInBar === beatsPerBar) {
+                currentBeatInBar = 0;
+            }
+        }
+
+        function scheduleNote(beatNumber, time) {
+            // Create an oscillator
+            const osc = audioContext.createOscillator();
+            const envelope = audioContext.createGain();
+
+            osc.connect(envelope);
+            envelope.connect(audioContext.destination);
+
+            // Setup pitch and volume based on beat
+            if (beatNumber === 0) {
+                osc.frequency.value = 880.0; // High pitch for downbeat
+            } else {
+                osc.frequency.value = 440.0; // Lower pitch for other beats
+            }
+
+            envelope.gain.value = 1;
+            envelope.gain.exponentialRampToValueAtTime(1, time + 0.001);
+            envelope.gain.exponentialRampToValueAtTime(0.001, time + 0.02); // Short, sharp click
+
+            osc.start(time);
+            osc.stop(time + 0.03);
+        }
+
+        function scheduler() {
+            // While there are notes that will need to play before the next interval,
+            // schedule them and advance the pointer.
+            while (nextNoteTime < audioContext.currentTime + scheduleAheadTime ) {
+                scheduleNote(currentBeatInBar, nextNoteTime);
+                nextNote();
+            }
+            if (isMetronomePlaying) {
+                // We use a small setTimeout to keep checking the clock. 
+                // Because we schedule audio in the future, slight JS delays won't affect rhythm.
+                timerWorker = setTimeout(scheduler, lookahead);
+            }
+        }
+
+        function toggleMetronome() {
+            const btn = document.getElementById('metronome-btn');
+            
+            if (isMetronomePlaying) {
+                // Turn off
+                isMetronomePlaying = false;
+                clearTimeout(timerWorker);
+                
+                // Reset Button UI
+                btn.classList.remove('bg-brown-600', 'text-white', 'hover:bg-brown-700');
+                btn.classList.add('bg-gray-100', 'text-gray-600', 'dark:bg-gray-700', 'dark:text-gray-300');
+                btn.innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`;
+
+            } else {
+                // Turn on
+                initAudioContext();
+                isMetronomePlaying = true;
+                currentBeatInBar = 0;
+                nextNoteTime = audioContext.currentTime + 0.05; // Start slightly in future
+                scheduler(); // Kick off scheduling loop
+
+                // Active Button UI
+                btn.classList.remove('bg-gray-100', 'text-gray-600', 'dark:bg-gray-700', 'dark:text-gray-300');
+                btn.classList.add('bg-brown-600', 'text-white', 'hover:bg-brown-700');
+                btn.innerHTML = `<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>`;
+            }
+        }
+
+        // Metronome Slider Listener
+        const bpmSlider = document.getElementById('bpm-slider');
+        const bpmDisplay = document.getElementById('bpm-display');
+        bpmSlider.addEventListener('input', (e) => {
+            bpm = parseInt(e.target.value);
+            bpmDisplay.textContent = `${bpm} BPM`;
+        });
 
         themeBtn.addEventListener('click', () => {
             const isDark = !document.documentElement.classList.contains('dark');

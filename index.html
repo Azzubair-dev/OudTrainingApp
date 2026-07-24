@@ -47,11 +47,14 @@
 <body class="bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100 min-h-screen flex flex-col font-sans pb-36">
 
     <!-- Header & Dark Mode Toggle -->
-    <header class="bg-white dark:bg-gray-800 shadow-sm p-4 relative flex justify-between items-center border-b border-gray-200 dark:border-gray-700">
-        <button id="theme-btn" class="p-2 rounded-md bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition" title="Toggle Dark Mode">
+    <header class="bg-white dark:bg-gray-800 shadow-sm p-4 relative flex items-center border-b border-gray-200 dark:border-gray-700">
+        <button id="theme-btn" class="p-2 rounded-md bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition flex-shrink-0" title="Toggle Dark Mode">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
         </button>
-        <h1 class="text-xl font-bold tracking-tight text-right flex-grow pr-4" dir="auto">تعلم العود</h1>
+        <h1 class="text-xl font-bold tracking-tight text-center flex-grow px-2" dir="auto">تعلم العود</h1>
+        <button onclick="window.location.reload(true)" class="p-2 rounded-md bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition flex-shrink-0" title="تحديث الصفحة">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+        </button>
     </header>
 
     <!-- Main Content Area -->
@@ -118,7 +121,7 @@
                     </button>
                 </div>
             </div>
-            <div class="text-center text-[10px] text-gray-400 tracking-widest font-mono">v1.8</div>
+            <div class="text-center text-[10px] text-gray-400 tracking-widest font-mono">v2.0</div>
         </div>
     </footer>
 
